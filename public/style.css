@@ -57,6 +57,7 @@ h1{
 .widthExample:nth-child(3){
     width: 15px;
     height: 15px;
+    opacity: 1;
 }
 .widthExample:nth-child(4){
     width: 20px;

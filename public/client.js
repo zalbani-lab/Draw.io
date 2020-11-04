@@ -1,3 +1,7 @@
+const socket = io();
+socket.emit("text", "Hi there, I am a client");
+
+
 createPalette();
 
 function createPalette(){
@@ -69,14 +73,7 @@ canvas.addEventListener("mousemove", (e) => {
 function draw(e) {
     const [x, y] = mousePos(e)
     if(lastPos){
-        ctx.beginPath();
-        ctx.strokeStyle = drawColor;
-        ctx.lineWidth = lineWidth;
-        ctx.lineJoin = "round";
-        ctx.moveTo(...lastPos);
-        ctx.lineTo(x, y);
-        ctx.closePath();
-        ctx.stroke();
+        socket.emit("drawing", drawColor, lineWidth, lastPos, [x,y]);
         lastPos = [x, y];
     }
     else{
@@ -84,13 +81,28 @@ function draw(e) {
     }
 }
 
+socket.on("drawing", (color, width, startPos, endPos) =>{
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineJoin = "round";
+    ctx.moveTo(...startPos);
+    ctx.lineTo(...endPos);
+    ctx.closePath();
+    ctx.stroke();
+});
+
 document.getElementById("clearBtn").addEventListener("click", () =>{
-    ctx.clearRect(0,0, canvas.width, canvas.height)
-})
+    socket.emit("clearCanvas");
+});
+
+socket.on("clearCanvas", () => {
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+});
 
 document.querySelectorAll(".colorSquare").forEach((square) =>{
     square.addEventListener("click", () =>{
-        drawColor =square.style.backgroundColor;
+        drawColor = square.style.backgroundColor;
         document.querySelectorAll(".widthExample").forEach((ex) => {
             ex.style.backgroundColor = drawColor;
         })
@@ -106,3 +118,7 @@ document.querySelectorAll(".widthExample").forEach((ex) => {
         ex.style.opacity = 1;
     })
 })
+
+socket.on("socketNumber", (number) =>{
+    document.getElementById("conter").innerText = number;
+});

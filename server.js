@@ -26,7 +26,7 @@ io.on("connect", (socket) => {
         drawingQueue.length = 0;
         io.emit("clearCanvas");
     });
-    socket.on("disconect", () =>{
+    socket.on("disconnect", () =>{
         socketNumber--;
         io.emit("socketNumber", socketNumber);
     })

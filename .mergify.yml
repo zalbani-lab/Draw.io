@@ -1,0 +1,47 @@
+pull_request_rules:
+  - name: automatic merge for Dependabot pull requests
+    conditions:
+      - author~=^dependabot(|-preview)\[bot\]$
+      - "status-success=build-and-test"
+      - "status-success=netlify/friendly-newton-306e59/deploy-preview"
+    actions:
+      merge:
+        method: merge
+  - name: automatic merge for ImgBot pull requests
+    conditions:
+      - author=imgbot[bot]
+      - "status-success=build-and-test"
+      - "status-success=netlify/friendly-newton-306e59/deploy-preview"
+    actions:
+      merge:
+        method: merge
+  - name: automatic merge for Snyk bot pull requests
+    conditions:
+      - author=snyk-bot[bot]
+      - "status-success=build-and-test"
+      - "status-success=netlify/friendly-newton-306e59/deploy-preview"
+    actions:
+      merge:
+        method: merge
+  - name: automatic merge for restyled bot pull requests
+    conditions:
+      - author=restyled-io[bot]
+    actions:
+      merge:
+        method: merge
+  - name: automatic merge Zalbani pull requests
+    conditions:
+      - author=Zalbani
+      - "status-success=build-and-test"
+      - "status-success=netlify/friendly-newton-306e59/deploy-preview"
+      - "status-success=restyled"
+      - "status-success=security/snyk (Zalbani)"
+    actions:
+      merge:
+        method: merge
+  - name: Automatic merge ⬇️ on approval ✔
+    conditions:
+      - "#approved-reviews-by>=1"
+    actions:
+      merge:
+        method: merge
